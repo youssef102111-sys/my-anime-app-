@@ -1,41 +1,44 @@
 [app]
 
-# (str) Title of your application
+# Title of your application
 title = MyApp
 
-# (str) Package name
+# Package name
 package.name = myapp
 
-# (str) Package domain (important)
+# Package domain (important)
 package.domain = org.test
 
-# (str) Source code location
+# Source code location
 source.dir = .
 
-# (list) Source files to include
+# Source files to include
 source.include_exts = py,png,jpg,kv,atlas
 
-# (list) Application requirements
+# Application version (مهم جداً)
+version = 0.1
+
+# Application requirements
 requirements = python3,kivy==2.3.0,kivymd==1.2.0
 
-# (str) Supported orientation
+# Supported orientation
 orientation = portrait
 
-# (bool) Fullscreen mode
+# Fullscreen mode
 fullscreen = 0
 
 
-# -------------------------------------------------
-# ---------------- Android ------------------------
-# -------------------------------------------------
+# ---------------------------------------------
+# ---------------- Android --------------------
+# ---------------------------------------------
 
-# (int) Target Android API
+# Target Android API
 android.api = 33
 
-# (int) Minimum API
+# Minimum API
 android.minapi = 21
 
-# (str) Android NDK version
+# Android NDK version
 android.ndk = 25b
 
 # Automatically accept SDK license
@@ -48,5 +51,5 @@ android.use_androidx = True
 # Permissions (لو التطبيق محتاج إنترنت)
 android.permissions = INTERNET
 
-# (bool) Use private storage (مهم لتجنب مشاكل صلاحيات)
+# Use private storage
 android.private_storage = True
