@@ -8,11 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
       - name: Set up Java
         uses: actions/setup-java@v4
@@ -20,15 +18,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install system dependencies
+      - name: Install dependencies
         run: |
           sudo apt update
           sudo apt install -y python3-pip zip unzip openjdk-17-jdk libffi-dev libssl-dev build-essential git expect
-
-      - name: Install Python dependencies
-        run: |
-          python3 -m pip install --upgrade pip
-          pip install cython buildozer
+          pip install buildozer cython
 
       - name: Build APK
         run: |
@@ -38,4 +32,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: my-app-apk
-          path: bin/*.apk
+          path: ./**/*.apk
