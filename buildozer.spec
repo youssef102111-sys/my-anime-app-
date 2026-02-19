@@ -3,6 +3,9 @@
 # (str) Title of your application
 title = My Application
 
+# (str) Application version
+version = 0.1
+
 # (str) Package name
 package.name = myapp
 
@@ -18,7 +21,7 @@ requirements = python3,kivy
 # (str) Supported orientation
 orientation = portrait
 
-# (bool) Include the application requirements
+# (bool) Fullscreen mode
 fullscreen = 0
 
 
@@ -36,7 +39,7 @@ android.sdk = 34
 # (str) Android NDK version
 android.ndk = 25b
 
-# (str) Force specific build tools version (IMPORTANT)
+# (str) Force specific build tools version
 android.build_tools = 34.0.0
 
 # (bool) Enable AndroidX support
