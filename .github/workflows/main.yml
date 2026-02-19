@@ -28,8 +28,11 @@ jobs:
         run: |
           yes | buildozer android debug || true
 
-      - name: Upload APK
+      - name: List Files (To Find APK)
+        run: find . -name "*.apk"
+
+      - name: Upload Everything
         uses: actions/upload-artifact@v4
         with:
-          name: my-app-apk
-          path: ./**/*.apk
+          name: all-files
+          path: .
