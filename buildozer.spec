@@ -1,19 +1,46 @@
 [app]
 
-title = MyAnimeApp
-package.name = myanimeapp
-package.domain = org.youssef
+# (str) Title of your application
+title = My Application
 
+# (str) Package name
+package.name = myapp
+
+# (str) Package domain (important)
+package.domain = org.test
+
+# (str) Source code where the main.py live
 source.dir = .
-source.include_exts = py,png,jpg,kv
 
-version = 1.0
-
+# (list) Application requirements
 requirements = python3,kivy
 
+# (str) Supported orientation
 orientation = portrait
+
+# (bool) Include the application requirements
 fullscreen = 0
 
-android.api = 33
+
+# ---------------- Android Specific ---------------- #
+
+# (int) Target Android API
+android.api = 34
+
+# (int) Minimum API your APK will support
 android.minapi = 21
-android.arch = arm64-v8a
+
+# (int) Android SDK version
+android.sdk = 34
+
+# (str) Android NDK version
+android.ndk = 25b
+
+# (str) Force specific build tools version (IMPORTANT)
+android.build_tools = 34.0.0
+
+# (bool) Enable AndroidX support
+android.enable_androidx = True
+
+# (bool) Use AndroidX
+android.use_androidx = True
