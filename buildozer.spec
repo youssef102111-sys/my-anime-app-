@@ -28,10 +28,9 @@ orientation = portrait
 fullscreen = 0
 
 
-
 # ================= ANDROID =================
 
-# (str) Android API to use (Stable)
+# (str) Android API to use
 android.api = 34
 
 # (str) Minimum API your APK will support
@@ -40,8 +39,8 @@ android.minapi = 21
 # (int) Android SDK version
 android.sdk = 34
 
-# (str) Android NDK version
-android.ndk = 23b
+# (str) Android NDK version (المهم هنا 👇)
+android.ndk = 25c
 
 # (bool) Accept SDK license automatically
 android.accept_sdk_license = True
@@ -49,12 +48,13 @@ android.accept_sdk_license = True
 # (list) Permissions
 android.permissions = INTERNET
 
+
 # =================================================
 
 
 [buildozer]
 
-# (int) Log level (0 = error only, 1 = info, 2 = debug)
+# (int) Log level
 log_level = 2
 
 # (int) Warn on root
