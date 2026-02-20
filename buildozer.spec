@@ -12,15 +12,22 @@ version = 0.1
 requirements = python3,kivy==2.2.1
 
 orientation = portrait
-
 fullscreen = 0
 
 android.permissions = INTERNET
 
+# تثبيت إصدارات مستقرة (مهم جدًا)
 android.api = 33
 android.minapi = 21
+android.sdk = 33
+android.ndk = 25b
+
 android.archs = arm64-v8a
 
+# حل مشكلة الرخصة
+android.accept_sdk_license = True
+
+# الأيقونة
 icon.filename = icon.png
 android.presplash.filename = icon.png
 
