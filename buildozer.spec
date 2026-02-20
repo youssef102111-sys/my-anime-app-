@@ -21,13 +21,9 @@ android.api = 33
 android.minapi = 21
 android.archs = arm64-v8a
 
-# سيبه يختار SDK و NDK لوحده
-# متكتبش android.sdk
-# متكتبش android.ndk
-
-# الأيقونة
-icon.filename = icon.png
-android.presplash.filename = icon.png
+# ⚠️ سيب الأيقونة فاضية دلوقتي
+# icon.filename =
+# android.presplash.filename =
 
 
 [buildozer]
