@@ -1,48 +1,44 @@
 [app]
 
-# (str) Title of your application
-title = My Anime App
+# (1) الاسم اللي هيظهر بره على الشاشة
+title = Emperor Anime
 
-# (str) Package name
-package.name = myanimeapp
-
-# (str) Package domain
+# (2) اسم الحزمة (بدون مسافات)
+package.name = emperoranime
 package.domain = org.test
 
-# (str) Source code location
+# سورس الكود والملفات المطلوبة
 source.dir = .
-
-# (list) Source files to include
 source.include_exts = py,png,jpg,kv,atlas
 
-# (str) Application version
+# الإصدار
 version = 0.1
 
-# (list) Application requirements
-requirements = python3,kivy
+# المتطلبات البرمجية (لضمان عمل الصور والقوائم)
+requirements = python3,kivy==2.2.1,pillow,requests,urllib3,certifi,chardet,idna
 
-# (str) Orientation
+# (3) الأيقونة (لو عندك صورة اسمها icon.png ارفعها بجانب الكود)
+icon.filename = %(source.dir)s/icon.png
+
+# اتجاه الشاشة
 orientation = portrait
 
-# (bool) Fullscreen
-fullscreen = 0
+# (4) الصلاحيات (ضرورية جداً لتشغيل الحلقات والصور)
+android.permissions = INTERNET
 
-
-# ================= ANDROID =================
-
+# (5) الإعدادات الذهبية اللي نجحت معانا (مهمة جداً)
 android.api = 34
 android.minapi = 21
-android.sdk = 34
 android.ndk = 25c
-android.accept_sdk_license = True
-android.permissions = INTERNET
+android.ndk_path = 
+android.sdk = 34
+
+# المعمارية اللي اشتغلت في المحاولة 57
 android.archs = arm64-v8a
 
-
-# =================================================
-
+# تفعيل الـ Android App Bundle (إيقافها للـ Debug)
+android.build_mode = debug
 
 [buildozer]
-
 log_level = 2
 warn_on_root = 1
