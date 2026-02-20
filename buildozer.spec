@@ -1,32 +1,55 @@
 [app]
 
+# اسم التطبيق
 title = Emperor Anime
+
+# اسم الباكدج (من غير مسافات)
 package.name = emperoranime
-package.domain = org.test
+package.domain = org.emperor
 
+# مكان الكود
 source.dir = .
-source.include_exts = py,png,jpg,kv,atlas
+source.include_exts = py,png,jpg,jpeg,kv
 
-version = 0.1
+# استبعد ملفات غير مهمة
+source.exclude_exts = spec
 
-requirements = python3,kivy==2.2.1
+# النسخة
+version = 1.0
 
+# المتطلبات
+requirements = python3,kivy,plyer
+
+# الاتجاه
 orientation = portrait
-fullscreen = 0
 
+# أيقونة التطبيق (لازم تكون في نفس فولدر المشروع)
+icon.filename = icon.png
+
+# شاشة بداية (اختياري لو عندك صورة)
+# android.presplash.filename = presplash.png
+
+# أذونات
 android.permissions = INTERNET
 
-# Android Settings (مستقر مع GitHub)
+# نسخة أندرويد
 android.api = 33
 android.minapi = 21
+
+# المعمارية (مناسبة لموبايلك A20s)
 android.archs = arm64-v8a
 
-# ⚠️ سيب الأيقونة فاضية دلوقتي
-# icon.filename =
-# android.presplash.filename =
+# تسريع build
+android.gradle_dependencies =
+
+# عدم استخدام fullscreen
+fullscreen = 0
 
 
 [buildozer]
 
+# مستوى اللوج
 log_level = 2
+
+# تحذير لو شغال root
 warn_on_root = 1
