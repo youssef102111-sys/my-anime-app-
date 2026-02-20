@@ -41,12 +41,12 @@ android.minapi = 21
 android.sdk = 34
 
 # (str) Android NDK version
-android.ndk = 25b
+android.ndk = 23b
 
 # (bool) Accept SDK license automatically
 android.accept_sdk_license = True
 
-# (list) Permissions (ضيف لو محتاج)
+# (list) Permissions
 android.permissions = INTERNET
 
 # =================================================
