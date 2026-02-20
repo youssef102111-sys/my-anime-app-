@@ -1,50 +1,78 @@
-name: Build APK
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.button import Button
+from kivy.uix.scrollview import ScrollView
+from kivy.uix.label import Label
+from kivy.uix.image import AsyncImage
+from kivy.uix.popup import Popup
+from kivy.utils import get_color_from_hex
+from kivy.core.window import Window
+from plyer import notification
+import webbrowser
 
-on:
-  push:
-    branches:
-      - main
-  workflow_dispatch:
+class AnimeApp(App):
+    def build(self):
+        Window.clearcolor = get_color_from_hex('#000000') # خلفية سوداء فخمة
+        self.root_layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        
+        # الرأس (اسم التطبيق وعلامة البحث)
+        header = BoxLayout(size_hint_y=0.1)
+        header.add_widget(Label(text='EMPEROR ANIME', font_size='24sp', bold=True, color=get_color_from_hex('#8A2BE2')))
+        btn_search = Button(text='🔍', size_hint_x=0.2, background_color=(0,0,0,0), color=get_color_from_hex('#8A2BE2'))
+        header.add_widget(btn_search)
+        self.root_layout.add_widget(header)
 
-jobs:
-  build:
-    runs-on: ubuntu-22.04
-    timeout-minutes: 60
+        # القائمة القابلة للتمرير
+        scroll = ScrollView(size_hint_y=0.8)
+        self.list_layout = BoxLayout(orientation='vertical', size_hint_y=None, spacing=15)
+        self.list_layout.bind(minimum_height=self.list_layout.setter('height'))
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+        # بيانات تجريبية (الاسم، ميعاد الحلقة، الرابط)
+        anime_data = [
+            ("One Piece", "Next: Tomorrow 8PM", "https://link-to-video.com"),
+            ("Solo Leveling", "Next: Sat 10PM", "https://link-to-video.com"),
+        ]
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.10'
+        for name, timer, link in anime_data:
+            item = BoxLayout(orientation='vertical', size_hint_y=None, height=150, padding=5)
+            
+            # زر الأنمي (عليه الصورة والاسم)
+            btn = Button(text=f"{name}\n[color=8A2BE2]{timer}[/color]", markup=True, 
+                         background_color=get_color_from_hex('#1A1A1A'), color=(1,1,1,1))
+            btn.bind(on_release=lambda x, n=name: self.show_quality_popup(n))
+            
+            item.add_widget(btn)
+            self.list_layout.add_widget(item)
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+        scroll.add_widget(self.list_layout)
+        self.root_layout.add_widget(scroll)
 
-      - name: Install dependencies
-        run: |
-          sudo apt update
-          sudo apt install -y zip unzip openjdk-17-jdk \
-          autoconf libtool pkg-config zlib1g-dev \
-          libncurses5-dev libncursesw5-dev libtinfo5 \
-          cmake libffi-dev libssl-dev build-essential git
+        # شريط التنقل السفلي (علامة بيت واحدة)
+        footer = BoxLayout(size_hint_y=0.1, padding=5)
+        home_btn = Button(text='🏠', size_hint_x=0.2, background_color=get_color_from_hex('#4B0082'))
+        footer.add_widget(home_btn)
+        footer.add_widget(Label(text='')) # فراغ للتنسيق
+        self.root_layout.add_widget(footer)
 
-      - name: Install Buildozer
-        run: |
-          python -m pip install --upgrade pip
-          pip install buildozer==1.5.0 cython==0.29.36
+        return self.root_layout
 
-      - name: Build APK
-        run: |
-          yes | buildozer -v android debug
+    def show_quality_popup(self, anime_name):
+        # نافذة الجودات والسيرفرات البنفسجية
+        content = BoxLayout(orientation='vertical', spacing=10, padding=10)
+        content.add_widget(Label(text=f"Select Quality for {anime_name}", color=get_color_from_hex('#8A2BE2')))
+        
+        for q in ['1080p ⚡', '720p ⚡', '480p ⚡', 'Server 2']:
+            btn = Button(text=q, background_color=get_color_from_hex('#4B0082'))
+            btn.bind(on_release=lambda x: webbrowser.open("https://youtube.com"))
+            content.add_widget(btn)
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: My-Anime-App
-          path: bin/*.apk
+        popup = Popup(title='Quality Selection', content=content, size_hint=(0.8, 0.6),
+                      background_color=get_color_from_hex('#000000'))
+        popup.open()
+
+    def send_anime_notify(self, anime_name):
+        # وظيفة إرسال الإشعار
+        notification.notify(title='Emperor Anime', message=f'New Episode of {anime_name} is OUT! ⚡')
+
+if __name__ == '__main__':
+    AnimeApp().run()
