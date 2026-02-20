@@ -16,16 +16,14 @@ fullscreen = 0
 
 android.permissions = INTERNET
 
-# تثبيت إصدارات مستقرة (مهم جدًا)
+# Android Settings (مستقر مع GitHub)
 android.api = 33
 android.minapi = 21
-android.sdk = 33
-android.ndk = 25b
-
 android.archs = arm64-v8a
 
-# حل مشكلة الرخصة
-android.accept_sdk_license = True
+# سيبه يختار SDK و NDK لوحده
+# متكتبش android.sdk
+# متكتبش android.ndk
 
 # الأيقونة
 icon.filename = icon.png
