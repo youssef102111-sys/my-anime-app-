@@ -1,199 +1,116 @@
 from kivy.app import App
-from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.uix.scrollview import ScrollView
 from kivy.uix.label import Label
 from kivy.uix.popup import Popup
-from kivy.uix.image import AsyncImage
 from kivy.utils import get_color_from_hex
 from kivy.core.window import Window
-from kivy.clock import Clock
-from kivy.animation import Animation
-from plyer import browser, notification
-from datetime import datetime, timedelta
+from plyer import notification
+import webbrowser
 
-
-Window.clearcolor = get_color_from_hex('#000000')
-
-
-# ================= SPLASH SCREEN =================
-class SplashScreen(Screen):
-    def on_enter(self):
-        self.clear_widgets()
-        layout = BoxLayout()
-        title = Label(
-            text="EMPEROR ANIME",
-            font_size="40sp",
-            bold=True,
-            color=get_color_from_hex('#8A2BE2'),
-            opacity=0
-        )
-        layout.add_widget(title)
-        self.add_widget(layout)
-
-        anim = Animation(opacity=1, duration=2)
-        anim.start(title)
-
-        Clock.schedule_once(self.go_main, 3)
-
-    def go_main(self, dt):
-        self.manager.current = "main"
-
-
-# ================= MAIN SCREEN =================
-class MainScreen(Screen):
-
-    def on_enter(self):
-        self.clear_widgets()
-        self.build_ui()
-
-    def build_ui(self):
-
-        main_layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
-
-        header = Label(
-            text='EMPEROR ANIME LIST',
-            font_size='24sp',
-            bold=True,
-            color=get_color_from_hex('#8A2BE2'),
-            size_hint_y=0.1
-        )
-        main_layout.add_widget(header)
-
-        scroll = ScrollView(size_hint_y=0.8)
-
-        container = BoxLayout(
-            orientation='vertical',
-            size_hint_y=None,
-            spacing=20
-        )
-        container.bind(minimum_height=container.setter('height'))
-
-        future_time = datetime.now() + timedelta(hours=24)
-
-        animes = [
-            ("One Piece",
-             "https://i.imgur.com/8Km9tLL.jpg",
-             "https://example.com"),
-            ("Solo Leveling",
-             "https://i.imgur.com/VZ6YVbR.jpg",
-             "https://example.com"),
-            ("Demon Slayer",
-             "https://i.imgur.com/5tj6S7Ol.jpg",
-             "https://example.com")
-        ]
-
-        for name, image_url, link in animes:
-
-            card = BoxLayout(
-                orientation='vertical',
-                size_hint_y=None,
-                height=260,
-                padding=10,
-                spacing=5
-            )
-
-            img = AsyncImage(
-                source=image_url,
-                size_hint_y=0.7
-            )
-
-            countdown_label = Label(
-                color=get_color_from_hex('#8A2BE2'),
-                font_size='16sp'
-            )
-
-            Clock.schedule_interval(
-                lambda dt, lbl=countdown_label, ft=future_time:
-                self.update_countdown(lbl, ft),
-                1
-            )
-
-            btn = Button(
-                text=name,
-                size_hint_y=0.2,
-                background_normal='',
-                background_color=get_color_from_hex('#121212')
-            )
-
-            btn.bind(on_release=lambda x, l=link, n=name:
-                     self.open_quality_menu(n, l))
-
-            card.add_widget(img)
-            card.add_widget(countdown_label)
-            card.add_widget(btn)
-
-            container.add_widget(card)
-
-        scroll.add_widget(container)
-        main_layout.add_widget(scroll)
-
-        self.add_widget(main_layout)
-
-    # ================= COUNTDOWN =================
-    def update_countdown(self, label, future_time):
-        remaining = future_time - datetime.now()
-
-        if remaining.total_seconds() > 0:
-            hours, remainder = divmod(int(remaining.total_seconds()), 3600)
-            minutes, seconds = divmod(remainder, 60)
-            label.text = f"Next Episode In: {hours:02}:{minutes:02}:{seconds:02}"
-        else:
-            label.text = "Episode Released! ⚡"
-
-    # ================= POPUP =================
-    def open_quality_menu(self, title, link):
-
-        layout = BoxLayout(
-            orientation='vertical',
-            spacing=10,
-            padding=20
-        )
-
-        layout.add_widget(Label(
-            text=f"Watch {title}",
-            bold=True,
+class EmperorAnimeApp(App):
+    def build(self):
+        # إعداد سمة الألوان: أسود وبنفسجي برق
+        Window.clearcolor = get_color_from_hex('#000000') 
+        self.main_layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
+        
+        # --- الجزء العلوي (العنوان والبحث) ---
+        header = BoxLayout(size_hint_y=0.1)
+        header.add_widget(Label(
+            text='EMPEROR ANIME LIST', 
+            font_size='24sp', 
+            bold=True, 
             color=get_color_from_hex('#8A2BE2')
         ))
+        search_btn = Button(
+            text='🔍', 
+            size_hint_x=0.2, 
+            background_color=(0,0,0,0), 
+            color=get_color_from_hex('#8A2BE2')
+        )
+        header.add_widget(search_btn)
+        self.main_layout.add_widget(header)
 
-        qualities = ['1080p ⚡', '720p ⚡', '480p ⚡']
+        # --- قائمة الأنمي (الصور والمواعيد) ---
+        scroll = ScrollView(size_hint_y=0.8)
+        self.anime_list_container = BoxLayout(orientation='vertical', size_hint_y=None, spacing=25)
+        self.anime_list_container.bind(minimum_height=self.anime_list_container.setter('height'))
 
-        for q in qualities:
-            btn = Button(
-                text=q,
+        # بيانات الأنمي التجريبية
+        animes = [
+            ("One Piece", "Next Ep: Sunday 09:00", "https://example.com/op"),
+            ("Solo Leveling", "Next Ep: Saturday 18:00", "https://example.com/sl"),
+            ("Demon Slayer", "New Season Coming Soon", "https://example.com/ds")
+        ]
+
+        for name, schedule, link in animes:
+            # حاوية لكل بطاقة أنمي
+            card = BoxLayout(orientation='vertical', size_hint_y=None, height=160, padding=10)
+            
+            # زر الأنمي مع عداد الوقت الملون
+            anime_btn = Button(
+                text=f"[b]{name}[/b]\n[color=8A2BE2]{schedule}[/color]", 
+                markup=True,
                 background_normal='',
-                background_color=get_color_from_hex('#4B0082')
+                background_color=get_color_from_hex('#121212'),
+                font_size='20sp',
+                halign='center'
             )
-            btn.bind(on_release=lambda x, url=link: browser.open(url))
+            # عند الضغط يظهر خيار الجودات
+            anime_btn.bind(on_release=lambda x, n=name: self.open_quality_menu(n))
+            
+            card.add_widget(anime_btn)
+            self.anime_list_container.add_widget(card)
+
+        scroll.add_widget(self.anime_list_container)
+        self.main_layout.add_widget(scroll)
+
+        # --- شريط التنقل (علامة بيت واحدة فقط) ---
+        footer = BoxLayout(size_hint_y=0.1, padding=5)
+        home_icon = Button(
+            text='🏠', 
+            size_hint_x=0.2, 
+            background_normal='',
+            background_color=get_color_from_hex('#4B0082')
+        )
+        footer.add_widget(home_icon)
+        footer.add_widget(Label(text='')) # موازن للفراغ
+        self.main_layout.add_widget(footer)
+
+        return self.main_layout
+
+    def open_quality_menu(self, title):
+        # نافذة الجودات والسيرفرات البنفسجية
+        layout = BoxLayout(orientation='vertical', spacing=10, padding=20)
+        layout.add_widget(Label(text=f"Quality Settings for {title}", bold=True, color=get_color_from_hex('#8A2BE2')))
+        
+        options = ['1080p (FHD) ⚡', '720p (HD) ⚡', '480p (SD) ⚡', 'Server VIP']
+        for opt in options:
+            btn = Button(text=opt, background_color=get_color_from_hex('#4B0082'))
+            btn.bind(on_release=lambda x: webbrowser.open("https://www.google.com"))
             layout.add_widget(btn)
 
         popup = Popup(
-            title='Emperor Player',
-            content=layout,
-            size_hint=(0.9, 0.7)
+            title='Emperor Player', 
+            content=layout, 
+            size_hint=(0.9, 0.7),
+            background_color=get_color_from_hex('#000000')
         )
-
         popup.open()
+        
+        # إرسال إشعار فوري عند المشاهدة
+        self.trigger_notification(title)
 
+    def trigger_notification(self, anime_name):
         try:
             notification.notify(
-                title="Emperor Anime",
-                message=f"Starting {title} ⚡",
-                timeout=5
+                title='Emperor Anime',
+                message=f'Starting {anime_name}... New episode alert active! ⚡',
+                timeout=10
             )
         except:
             pass
-
-
-# ================= APP =================
-class EmperorAnimeApp(App):
-    def build(self):
-        sm = ScreenManager()
-        sm.add_widget(SplashScreen(name="splash"))
-        sm.add_widget(MainScreen(name="main"))
-        return sm
-
 
 if __name__ == '__main__':
     EmperorAnimeApp().run()
