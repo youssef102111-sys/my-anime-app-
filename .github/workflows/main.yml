@@ -39,10 +39,6 @@ jobs:
           python -m pip install --upgrade pip
           pip install buildozer==1.5.0 cython==0.29.36
 
-      - name: Clean previous builds
-        run: |
-          buildozer android clean
-
       - name: Build APK
         run: |
           yes | buildozer -v android debug
