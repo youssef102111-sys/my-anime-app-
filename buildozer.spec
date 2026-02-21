@@ -10,24 +10,16 @@ package.domain = org.emperor
 # مكان الكود
 source.dir = .
 source.include_exts = py,png,jpg,jpeg,kv
-
-# استبعد ملفات غير مهمة
 source.exclude_exts = spec
 
 # النسخة
 version = 1.0
 
-# المتطلبات
-requirements = python3,kivy,plyer
+# المتطلبات (شيلنا plyer)
+requirements = python3,kivy
 
 # الاتجاه
 orientation = portrait
-
-
-
-
-# شاشة بداية (اختياري لو عندك صورة)
-# android.presplash.filename = presplash.png
 
 # أذونات
 android.permissions = INTERNET
@@ -36,20 +28,14 @@ android.permissions = INTERNET
 android.api = 33
 android.minapi = 21
 
-# المعمارية (مناسبة لموبايلك A20s)
-android.archs = arm64-v8a
+# المعمارية (مهم عشان يشتغل على موبايلك)
+android.archs = armeabi-v7a, arm64-v8a
 
-# تسريع build
-android.gradle_dependencies =
-
-# عدم استخدام fullscreen
+# عدم ملء الشاشة
 fullscreen = 0
 
 
 [buildozer]
 
-# مستوى اللوج
 log_level = 2
-
-# تحذير لو شغال root
 warn_on_root = 1
