@@ -23,8 +23,8 @@ requirements = python3,kivy,plyer
 # الاتجاه
 orientation = portrait
 
-# أيقونة التطبيق (لازم تكون في نفس فولدر المشروع)
-icon.filename = icon.png
+
+
 
 # شاشة بداية (اختياري لو عندك صورة)
 # android.presplash.filename = presplash.png
